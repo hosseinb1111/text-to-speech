@@ -80,6 +80,26 @@ Compatible hosting options include:
 
 Simply deploy the project files while preserving their directory structure.
 
+## Deploy to Cloudflare Workers
+
+This repository includes a GitHub Actions workflow that deploys the static app to **Cloudflare Workers Static Assets** whenever changes to the application files are pushed to `main`. You can also run the workflow manually from the GitHub Actions tab.
+
+### One-time setup
+
+1. In your Cloudflare dashboard, create an API token with the **Edit Cloudflare Workers** permission, scoped to the account where you want to deploy.
+2. In the GitHub repository, open **Settings → Secrets and variables → Actions** and add these repository secrets:
+   - `CLOUDFLARE_API_TOKEN`: the API token you created.
+   - `CLOUDFLARE_ACCOUNT_ID`: your Cloudflare account ID.
+3. Push the workflow and `wrangler.jsonc` to the `main` branch. GitHub Actions will publish the app as the Worker named `text-to-speech`.
+
+The workflow copies only `index.html`, `style.css`, and `script.js` into `dist/` before deployment. The Wrangler configuration points Cloudflare to that directory, so repository files such as the README and license are not published as site assets.
+
+After the first successful deployment, open the Worker in **Cloudflare Dashboard → Workers & Pages** to view its `workers.dev` address or attach a custom domain.
+
+### Change the Worker name
+
+To use a different Worker name, edit the `name` value in `wrangler.jsonc` before deploying.
+
 ## Project Structure
 
 ```text
