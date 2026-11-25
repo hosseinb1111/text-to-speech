@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f3f5f9">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Text to Speech Pro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-container">
+    <header>
+      <div class="heading-copy">
+        <h1>Text to Speech</h1>
+        <p class="subtitle">Choose a voice and let your text speak.</p>
+      </div>
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark theme" aria-pressed="false">
+        <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.2 15.1A8.5 8.5 0 0 1 8.9 3.8 8.6 8.6 0 1 0 20.2 15.1Z"></path>
+        </svg>
+        <span id="themeToggleText">Dark mode</span>
+      </button>
+    </header>
+
+    <section class="voice-selector-wrap" aria-label="Voice settings">
+      <label for="voiceSelect">Voice</label>
+      <div class="select-container">
+        <select id="voiceSelect" disabled aria-label="Select a speech voice">
+          <option value="">Loading voices...</option>
+        </select>
+        <div class="loader-overlay" id="loaderOverlay" aria-live="polite">
+          <span class="loader-text" id="loaderText">Initializing 0%</span>
+          <div class="progress-bar-bg" aria-hidden="true">
+            <div class="progress-bar-fill" id="progressBarFill"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="input-group" id="inputGroup">
+      <div class="textarea-shell" id="textareaShell">
+        <div class="text-highlight-backdrop" id="highlightBackdrop" aria-hidden="true">
+          <div class="text-highlight-mirror" id="highlightMirror"></div>
+        </div>
+        <textarea id="textInput" aria-label="Text to read aloud" placeholder="Paste your script, article, or notes here..."></textarea>
+      </div>
+      <p class="input-hint" id="startHint">Tap a sentence to choose where reading starts, then press <strong>Play</strong>. During playback, tap another sentence to jump there.</p>
+    </section>
+
+    <div class="controls" aria-label="Speech controls">
+      <button id="playBtn" class="control-btn btn-primary" type="button" aria-busy="false">
+        <svg id="playIcon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+        <span id="playBtnText" aria-live="polite">Play</span>
+      </button>
+      <button id="pauseBtn" class="control-btn btn-secondary" type="button" aria-pressed="false" disabled>
+        <svg id="pauseIcon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg>
+        <span id="pauseBtnText" aria-live="polite" aria-atomic="true">Pause</span>
+      </button>
+      <button id="stopBtn" class="control-btn btn-danger" type="button" aria-label="Stop reading" disabled>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 6h12v12H6z"></path></svg>
+        Stop
+      </button>
+    </div>
+
+    <section class="speed-control" aria-label="Playback speed settings">
+      <div class="speed-heading">
+        <div class="speed-copy">
+          <p class="speed-title">Reading speed</p>
+          <p class="speed-help">Choose a pace that feels clear and comfortable.</p>
+        </div>
+        <div class="speed-current" aria-live="polite" aria-atomic="true">
+          <strong id="speedCurrentValue">1×</strong>
+          <span id="speedCurrentLabel">Normal</span>
+        </div>
+      </div>
+      <div class="speed-options" role="group" aria-label="Choose a reading speed">
+        <button class="speed-btn" type="button" data-rate="0.5" aria-pressed="false" aria-label="0.5 times speed, slow">
+          <span class="speed-rate">0.5×</span><span class="speed-name">Slow</span>
+        </button>
+        <button class="speed-btn" type="button" data-rate="0.75" aria-pressed="false" aria-label="0.75 times speed, gentle">
+          <span class="speed-rate">0.75×</span><span class="speed-name">Gentle</span>
+        </button>
+        <button class="speed-btn is-active" type="button" data-rate="1" aria-pressed="true" aria-label="1 times speed, normal">
+          <span class="speed-rate">1×</span><span class="speed-name">Normal</span>
+        </button>
+        <button class="speed-btn" type="button" data-rate="1.1" aria-pressed="false" aria-label="1.1 times speed, slightly faster">
+          <span class="speed-rate">1.1×</span><span class="speed-name">Brisk</span>
+        </button>
+        <button class="speed-btn" type="button" data-rate="1.2" aria-pressed="false" aria-label="1.2 times speed, quick">
+          <span class="speed-rate">1.2×</span><span class="speed-name">Quick</span>
+        </button>
+      </div>
+      <p class="speed-note" id="speedNote" aria-live="polite" aria-atomic="true">Normal speed is recommended for the clearest, most natural reading.</p>
+    </section>
+
+    <div class="visualizer-container" id="visualizer" aria-hidden="true">
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+    </div>
+    <div class="footer-bottom">
+      <span>Created with</span>
+      <span class="heart" role="img" aria-label="love">❤️</span>
+      <span>&amp;</span>
+      <span class="coffee" role="img" aria-label="coffee">☕</span>
+      <span>by</span>
+      <span class="credit-name">Hossein Seyed Bagheri</span>
+      <a
+        class="github-link"
+        href="https://github.com/hosseinb1111/text-to-speech"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="View project on GitHub"
+        title="View on GitHub"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
+             aria-hidden="true" focusable="false">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+      </a>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
